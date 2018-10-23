@@ -8,6 +8,8 @@ class PaymentSchema extends Schema {
     this.create('payments', (table) => {
       table.increments()
       table.timestamps()
+      table.string("name")
+      table.float("amount")
     })
   }
 

@@ -8,6 +8,14 @@ class UserSchema extends Schema {
     this.create('users', (table) => {
       table.increments()
       table.timestamps()
+      table.string("name")
+      table.string("phone")
+      table.string("role")
+      table.date("birthday")
+      table.float("score")
+      table.float("balance")
+      table.integer("page_index")
+      table.float("discount")
     })
   }
 

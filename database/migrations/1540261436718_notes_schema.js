@@ -8,6 +8,8 @@ class NotesSchema extends Schema {
     this.create('notes', (table) => {
       table.increments()
       table.timestamps()
+      table.string("picture")
+      table.text("tips")
     })
   }
 

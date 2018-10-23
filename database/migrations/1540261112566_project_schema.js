@@ -8,6 +8,8 @@ class ProjectSchema extends Schema {
     this.create('projects', (table) => {
       table.increments()
       table.timestamps()
+      table.string("name")
+      table.float("percent")
     })
   }
 
