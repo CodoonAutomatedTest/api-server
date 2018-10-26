@@ -4,6 +4,9 @@
 const Model = use('Model')
 
 class Project extends Model {
+    businesses() { 
+        return this.hasMany('App/Models/Business')
+    }
 }
 
 module.exports = Project
