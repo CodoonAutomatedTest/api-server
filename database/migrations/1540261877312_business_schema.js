@@ -14,11 +14,6 @@ class BusinessSchema extends Schema {
       table.integer('project_id').unsigned()
       table.foreign('project_id').references('projects.id')
       table.float('price')
-      table.integer('payment_id').unsigned()
-      table.foreign('payment_id').references("payments.id")
-      table.string('staff')
-      table.integer('note_id').unsigned()
-      table.foreign('note_id').references('notes.id').onDelete("cascade");
     })
   }
 

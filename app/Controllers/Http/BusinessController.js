@@ -4,6 +4,8 @@
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
 /** @typedef {import('@adonisjs/framework/src/View')} View */
 
+const Business = use('App/Models/Business')
+
 /**
  * Resourceful controller for interacting with businesses
  */
@@ -17,19 +19,19 @@ class BusinessController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async index ({ request, response, view }) {
-  }
-
-  /**
-   * Render a form to be used for creating a new business.
-   * GET businesses/create
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async create ({ request, response, view }) {
+  async index({ request, response, view }) {
+    // const businesses = await Business.all()
+    const businesses = await Business.query()
+      .with('user')
+      .with('project')
+      .with('staff')
+      .with('payments')
+      .with('note')
+      .fetch()
+    response.json({
+      message: 'Successfully view businesses lists',
+      data: businesses
+    })
   }
 
   /**
@@ -40,7 +42,13 @@ class BusinessController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async store ({ request, response }) {
+  async store({ request, response }) {
+    const businessObj = request.post()
+    const business = await Business.create(businessObj)
+    response.json({
+      message: 'Successfully created a business',
+      data: business
+    })
   }
 
   /**
@@ -52,19 +60,12 @@ class BusinessController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async show ({ params, request, response, view }) {
-  }
-
-  /**
-   * Render a form to update an existing business.
-   * GET businesses/:id/edit
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async edit ({ params, request, response, view }) {
+  async show({ request, response }) {
+    const business = request.params.business
+    return response.status(200).json({
+      message: 'success',
+      data: business
+    })
   }
 
   /**
@@ -75,7 +76,15 @@ class BusinessController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async update ({ params, request, response }) {
+  async update({ params, request, response }) {
+    const business = request.params.business
+    const businessObj = request.post()
+    business.merge(businessObj)
+    business.save()
+    return response.status(200).json({
+      message: 'success',
+      data: business
+    })
   }
 
   /**
