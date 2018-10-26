@@ -4,6 +4,8 @@
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
 /** @typedef {import('@adonisjs/framework/src/View')} View */
 
+const User = use('App/Models/User')
+
 /**
  * Resourceful controller for interacting with users
  */
@@ -17,19 +19,13 @@ class UserController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async index ({ request, response, view }) {
-  }
-
-  /**
-   * Render a form to be used for creating a new user.
-   * GET users/create
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async create ({ request, response, view }) {
+  async index({ request, response, view }) {
+    // const users = await User.all()
+    const users = await User.query().with('businesses').fetch()
+    response.json({
+      message: 'Successfully view users list',
+      data: users
+    })
   }
 
   /**
@@ -40,7 +36,14 @@ class UserController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async store ({ request, response }) {
+  async store({ request, response }) {
+    const customer = request.post()
+    const user = await User.findOrCreate(customer)
+    
+    response.json({
+      message: 'Successfully created a new user',
+      data: user
+    })
   }
 
   /**
@@ -52,7 +55,13 @@ class UserController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async show ({ params, request, response, view }) {
+  async show({ request, response, params: { id } }) {
+    const user = request.params.user
+
+    return response.status(200).json({
+      message: 'success',
+      data: user
+    })
   }
 
   /**
@@ -75,7 +84,16 @@ class UserController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async update ({ params, request, response }) {
+  async update({ request, response, params: { id } }) {
+    const user = await request.params.user
+    const userObj = request.post()
+    user.merge(userObj)
+    user.save()
+
+    return response.status(200).json({
+      message: 'success',
+      data: user
+    })
   }
 
   /**
