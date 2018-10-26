@@ -4,6 +4,8 @@
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
 /** @typedef {import('@adonisjs/framework/src/View')} View */
 
+const Note = use('App/Models/Note')
+
 /**
  * Resourceful controller for interacting with notes
  */
@@ -17,19 +19,12 @@ class NoteController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async index ({ request, response, view }) {
-  }
-
-  /**
-   * Render a form to be used for creating a new note.
-   * GET notes/create
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async create ({ request, response, view }) {
+  async index({ request, response, view }) {
+    const notes = await Note.all()
+    response.json({
+      message: 'Successfully view notes list',
+      data: notes
+    })
   }
 
   /**
@@ -40,7 +35,13 @@ class NoteController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async store ({ request, response }) {
+  async store({ request, response }) {
+    const noteObj = request.post()
+    const note = await Note.create(noteObj)
+    response.json({
+      message: 'Successfully created a note',
+      data: note
+    })
   }
 
   /**
@@ -52,19 +53,12 @@ class NoteController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async show ({ params, request, response, view }) {
-  }
-
-  /**
-   * Render a form to update an existing note.
-   * GET notes/:id/edit
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async edit ({ params, request, response, view }) {
+  async show({ request, response }) {
+    const note = request.params.note
+    return response.status(200).json({
+      message: 'success',
+      data: note
+    })
   }
 
   /**
@@ -75,7 +69,15 @@ class NoteController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async update ({ params, request, response }) {
+  async update({ request, response }) {
+    const note = request.params.note
+    const noteObj = request.post()
+    note.merge(noteObj)
+    note.save()
+    return response.status(200).json({
+      message: 'success',
+      data: note
+    })
   }
 
   /**

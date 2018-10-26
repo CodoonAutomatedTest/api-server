@@ -4,6 +4,9 @@
 const Model = use('Model')
 
 class Note extends Model {
+    businesses() { 
+        return this.belongsTo('App/Models/Business')
+    }
 }
 
 module.exports = Note
