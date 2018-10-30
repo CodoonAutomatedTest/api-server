@@ -41,6 +41,8 @@ const namedMiddleware = {
   projectFinder: 'App/Middleware/ProjectFinder',
   paymentFinder: 'App/Middleware/PaymentFinder',
   noteFinder: 'App/Middleware/NoteFinder',
+  businessFinder: 'App/Middleware/BusinessFinder',
+  businessCreater: 'App/Middleware/BusinessCreater',
 }
 
 /*

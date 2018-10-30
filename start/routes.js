@@ -16,44 +16,51 @@
 /** @type {typeof import('@adonisjs/framework/src/Route/Manager')} */
 const Route = use('Route')
 
-Route.get('/', () => {
-  return { greeting: 'Hello world in JSON' }
-})
-
-
 // User
-Route.get('users', 'UserController.index')
-Route.post('users', 'UserController.store')
-Route.get('users/:id', 'UserController.show').middleware('userFinder')
-Route.patch('users/:id', 'UserController.update').middleware('userFinder')
-
+Route.group(() => {
+  Route.resource('users', 'UserController').middleware(new Map([[
+    ['show', 'update'],
+    ['userFinder']
+  ]]))
+}).prefix('api/v1')
 
 // Project
-Route.get('projects', 'ProjectController.index')
-Route.post('projects', 'ProjectController.store')
-Route.get('projects/:id', 'ProjectController.show').middleware('projectFinder')
-Route.patch('projects/:id', 'ProjectController.update').middleware('projectFinder')
+Route.group(() => {
+  Route.resource('projects', 'ProjectController').middleware(new Map([[
+    ['show', 'update'],
+    ['projectFinder']
+  ]]))
+}).prefix('api/v1')
 
 // Staff
-Route.get('staff', 'StaffController.index')
-Route.post('staff', 'StaffController.store')
-Route.get('staff/:id', 'StaffController.show').middleware('staffFinder')
-Route.patch('staff/:id', 'StaffController.update').middleware('staffFinder')
+Route.group(() => {
+  Route.resource('staff', 'StaffController').middleware(new Map([[
+    ['show', 'update'],
+    ['staffFinder']
+  ]]))
+}).prefix('api/v1')
 
 // Payment
-Route.get('payments', 'PaymentController.index')
-Route.post('payments', 'PaymentController.store')
-Route.get('payments/:id', 'PaymentController.show').middleware('paymentFinder')
-Route.patch('payments/:id', 'PaymentController.update').middleware('paymentFinder')
+Route.group(() => {
+  Route.resource('payments', 'PaymentController').middleware(new Map([[
+    ['show', 'update'],
+    ['paymentFinder']
+  ]]))
+}).prefix('api/v1')
 
 // Note
-Route.get('notes', 'NoteController.index')
-Route.post('notes', 'NoteController.store')
-Route.get('notes/:id', 'NoteController.show').middleware('noteFinder')
-Route.patch('notes/:id', 'NoteController.update').middleware('noteFinder')
+Route.group(() => {
+  Route.resource('notes', 'NoteController').middleware(new Map([[
+    ['show', 'update'],
+    ['noteFinder']
+  ]]))
+}).prefix('api/v1')
 
 // Business
-Route.get('businesses', 'BusinessController.index')
-Route.post('businesses', 'BusinessController.store')
-Route.get('businesses/:id', 'BusinessController.show')
-Route.patch('businesses/:id', 'BusinessController.update')
+Route.group(() => {
+  Route.post('businesses/add', 'BusinessController.add').middleware('businessCreater')
+  Route.resource('businesses', 'BusinessController').middleware(new Map([[
+    ['show', 'update'],
+    ['businessFinder']
+  ]]))
+}).prefix('api/v1')

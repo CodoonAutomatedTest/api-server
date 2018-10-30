@@ -34,6 +34,30 @@ class BusinessController {
     })
   }
 
+  async add({ request, response, view }) {
+    const time = request.post().time
+    const user_id = request.post().user_id
+    const project_id = request.post().project_id
+    const price = request.post().price
+    const payments = request.post().payments
+    const note = request.post().note
+    const picture = request.post().picture
+    const staff = request.post().staff
+
+    const business = await Business.create({
+      time: time,
+      user_id: user_id,
+      project_id: project_id,
+      price: price,
+    })
+
+    response.business = business
+    response.payments = payments
+    response.note = note
+    response.picture = picture
+    response.staff = staff
+  }
+
   /**
    * Create/save a new business.
    * POST businesses
